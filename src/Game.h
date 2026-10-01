@@ -20,25 +20,17 @@ class Game
  private:
   sf::RenderWindow& window;
 
-  //sprites
-  sf::Sprite background;
-  sf::Sprite mainmenubackground;
-  sf::Sprite bird;
-
   //textures
-  sf::Texture backgroundTexture;
-  sf::Texture mainmenubackgroundTexture;
-  sf::Texture birdTexture;
+  sf::Texture backgroundTexture{ "../Data/Images/Whackamole Worksheet/background.png" };
+  sf::Texture birdTexture{ "../Data/Images/Whackamole Worksheet/bird.png" };
 
-  //font
-  sf::Font font;
+  //sprites
+  sf::Sprite background = sf::Sprite(backgroundTexture);
+  sf::Sprite bird = sf::Sprite(birdTexture);
 
-  //menu
-  bool inmenu;
-  sf::Text menutext;
-  sf::Text playoption;
-  sf::Text quitoption;
-  bool playoptionselected;
+  
+
+  
 
 
 };

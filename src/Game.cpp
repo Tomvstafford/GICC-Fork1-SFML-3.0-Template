@@ -10,14 +10,15 @@ Game::Game(sf::RenderWindow& game_window)
 
 Game::~Game()
 {
-
+ 
 }
 
 // We call this once after the game class is instantiated
 bool Game::init()
 {
-
-  return true;
+	background.setTexture(backgroundTexture);
+	bird.setTexture(birdTexture);
+	return true;
 }
 
 // Update runs after event polling and before rendering
@@ -30,7 +31,8 @@ void Game::update(float dt)
 // Runs after update, use it to tell the window what to draw this frame
 void Game::render()
 {
-
+	window.draw(background);
+	window.draw(bird);
 }
 
 //Called by event polling when a MouseButtonPressed event is found
