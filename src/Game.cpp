@@ -3,14 +3,19 @@
 #include <iostream>
 
 Game::Game(sf::RenderWindow& game_window)
-  : window(game_window)
+	: window(game_window),
+	font("../Data/Fonts/OpenSans-Bold.ttf"),
+	titleText(font, "Whack-a-mole", 50),
+	playText(font, "Play", 30),
+	exitText(font, "Exit", 30)
 {
-  srand(time(NULL)); //seeds random number generator with the current time
+	srand(time(NULL));
 }
 
 Game::~Game()
 {
- 
+
+
 }
 
 // We call this once after the game class is instantiated
@@ -19,20 +24,78 @@ bool Game::init()
 	background.setTexture(backgroundTexture);
 	bird.setTexture(birdTexture);
 	return true;
+
+	if (!backgroundTexture.loadFromFile("../Data/Images/Whackamole Worksheet/background.png"))
+	{
+		std::cout << "Failed to load background texture" << std::endl;
+		return false;
+	}
+
+	if (!birdTexture.loadFromFile("../Data/Images/Whackamole Worksheet/bird.png"))
+	{
+		std::cout << "Failed to load bird texture" << std::endl;
+		return false;
+	}
+	if (!font.openFromFile("../Data/Fonts/OpenSans-Bold.ttf"))
+	{
+		return false;
+	}
 }
 
 // Update runs after event polling and before rendering
 // use it for everything that needs to update between frames
 void Game::update(float dt)
 {
+	if (menuActive == true)
+	{
+		sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
 
+		if (playText.getGlobalBounds().contains(mousePos))
+		{
+			playButtonHovered = true;
+			playText.setFillColor(sf::Color::Green);
+		}
+		else
+		{
+			playButtonHovered = false;
+			playText.setFillColor(sf::Color::White);
+		}
+
+		if (exitText.getGlobalBounds().contains(mousePos))
+		{
+			exitButtonHovered = true;
+			exitText.setFillColor(sf::Color::Red);
+		}
+		else
+		{
+			exitButtonHovered = false;
+			exitText.setFillColor(sf::Color::White);
+		}
+	}
 }
 
 // Runs after update, use it to tell the window what to draw this frame
 void Game::render()
 {
-	window.draw(background);
-	window.draw(bird);
+     if (menuActive == true)
+	 {
+		 titleText.setPosition({ 200, 100 });
+		 titleText.setScale({ 2.0f, 2.0f });
+		 playText.setPosition({ 500, 300 });
+		 playText.setScale({ 1.5f, 1.5f });
+		 exitText.setPosition({ 500, 400 });
+		 exitText.setScale({ 1.5f, 1.5f });
+		 window.draw(titleText);
+		 window.draw(playText);
+		 window.draw(exitText);
+		 return;
+	 }
+	 else if (menuActive == false)
+	 {
+		 window.draw(background);
+		 window.draw(bird);
+	 }
+	
 }
 
 //Called by event polling when a MouseButtonPressed event is found
@@ -56,7 +119,16 @@ void Game::mouseButtonReleased(const sf::Event::MouseButtonReleased* event)
 	//Works the same as MouseButtonPressed
 	if (event->button == sf::Mouse::Button::Left)
 	{
-		//Left mouse button was released
+		sf::Vector2f mousePos = window.mapPixelToCoords(event->position);
+
+		if (playText.getGlobalBounds().contains(mousePos))
+		{
+			menuActive = false;
+		}
+		else if (exitText.getGlobalBounds().contains(mousePos))
+		{
+			window.close();
+		}
 	}
 }
 
@@ -66,7 +138,7 @@ void Game::keyPressed(const sf::Event::KeyPressed* event)
 	// You can tell which button was pressed by the scancode to SFML's definitions of keyboard keys
 	if (event->scancode == sf::Keyboard::Scancode::W)
 	{
-		// W was pressed
+
 	}
 
 }
@@ -81,5 +153,4 @@ void Game::keyReleased(const sf::Event::KeyReleased* event)
 	}
 
 }
-
 

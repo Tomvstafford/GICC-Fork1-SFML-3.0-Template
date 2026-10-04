@@ -16,9 +16,21 @@ class Game
   void mouseButtonReleased(const sf::Event::MouseButtonReleased* event);
   void keyPressed(const sf::Event::KeyPressed* event);
   void keyReleased(const sf::Event::KeyReleased* event);
+  
 
  private:
   sf::RenderWindow& window;
+
+
+  // menu
+  bool menuActive = true;
+  bool playButtonHovered = false;
+  bool exitButtonHovered = false;
+
+  sf::Font font;
+  sf::Text titleText;
+  sf::Text playText;
+  sf::Text exitText;
 
   //textures
   sf::Texture backgroundTexture{ "../Data/Images/Whackamole Worksheet/background.png" };
@@ -27,11 +39,6 @@ class Game
   //sprites
   sf::Sprite background = sf::Sprite(backgroundTexture);
   sf::Sprite bird = sf::Sprite(birdTexture);
-
-  
-
-  
-
 
 };
 
