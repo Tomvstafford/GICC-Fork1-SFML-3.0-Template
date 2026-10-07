@@ -164,8 +164,13 @@ void Game::mouseButtonReleased(const sf::Event::MouseButtonReleased* event)
 			scoreText.setString("Score: " + std::to_string(score));
 			float randomX = rand() % 900 + 1;
 			float randomY = rand() % 600 + 1;
-			bird.setPosition({ randomX, randomY });
-
+			//bird.setPosition({ randomX, randomY });
+			birdVelocity.x *= 1.1f;
+			birdVelocity.y *= 1.1f;
+			x_prime = (birdVelocity.x * cos(30) - birdVelocity.y * sin(30));
+			y_prime = (birdVelocity.x * sin(30) + birdVelocity.y * cos(30));
+			birdVelocity.x = x_prime;
+			birdVelocity.y = y_prime;
 		}
 	}
 

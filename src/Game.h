@@ -44,6 +44,9 @@ class Game
 
   //variableas
   int score = 0;
+  float x_prime = 0.0f;
+  float y_prime = 0.0f;
+  float theta = (rand() % 360)* 3.14 / 360.0f; // Convert degrees to radians
 
   sf::Vector2f birdVelocity{ 400.0f, 300.0f };
 };
