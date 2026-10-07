@@ -7,9 +7,12 @@ Game::Game(sf::RenderWindow& game_window)
 	font("../Data/Fonts/OpenSans-Bold.ttf"),
 	titleText(font, "Whack-a-mole", 50),
 	playText(font, "Play", 30),
-	exitText(font, "Exit", 30)
+	exitText(font, "Exit", 30),
+	scoreText(font, "Score: 0", 20)
+
 {
 	srand(time(NULL));
+
 }
 
 Game::~Game()
@@ -23,6 +26,7 @@ bool Game::init()
 {
 	background.setTexture(backgroundTexture);
 	bird.setTexture(birdTexture);
+	bird.setScale({ 0.5f, 0.5f });
 	return true;
 
 	if (!backgroundTexture.loadFromFile("../Data/Images/Whackamole Worksheet/background.png"))
@@ -72,6 +76,22 @@ void Game::update(float dt)
 			exitText.setFillColor(sf::Color::White);
 		}
 	}
+	if (ingame == true)
+	{
+		bird.move({ birdVelocity.x * dt, birdVelocity.y * dt });
+
+		sf::FloatRect birdBounds = bird.getGlobalBounds();
+		sf::FloatRect bounds = bird.getGlobalBounds();
+		
+		if (bounds.position.x <= 0 || bounds.position.x + bounds.size.x >= window.getSize().x)
+		{
+			birdVelocity.x = -birdVelocity.x;
+		}
+		if (bounds.position.y <= 0 || bounds.position.y + bounds.size.y >= window.getSize().y)
+		{
+			birdVelocity.y = -birdVelocity.y;
+		}
+	}
 }
 
 // Runs after update, use it to tell the window what to draw this frame
@@ -90,10 +110,13 @@ void Game::render()
 		 window.draw(exitText);
 		 return;
 	 }
-	 else if (menuActive == false)
+	 else if (ingame == true)
 	 {
 		 window.draw(background);
 		 window.draw(bird);
+		 window.draw(scoreText);
+		 scoreText.setScale({ 1.5f, 1.5f });
+		 scoreText.setFillColor(sf::Color::Black);
 	 }
 	
 }
@@ -109,7 +132,7 @@ void Game::mouseButtonPressed(const sf::Event::MouseButtonPressed* event)
 	// You can tell which button was pressed by comparing it to SFML's definitions of mouse buttons
 	if (event->button == sf::Mouse::Button::Left)
 	{
-		//Left mouse button was pressed
+		
 	}
 }
 
@@ -124,12 +147,29 @@ void Game::mouseButtonReleased(const sf::Event::MouseButtonReleased* event)
 		if (playText.getGlobalBounds().contains(mousePos))
 		{
 			menuActive = false;
+			ingame = true;
 		}
 		else if (exitText.getGlobalBounds().contains(mousePos))
 		{
 			window.close();
 		}
 	}
+
+	if (ingame == true)
+	{
+		sf::Vector2f mousePos = window.mapPixelToCoords(event->position);
+		if (bird.getGlobalBounds().contains(mousePos))
+		{
+			score += 1;
+			scoreText.setString("Score: " + std::to_string(score));
+			float randomX = rand() % 900 + 1;
+			float randomY = rand() % 600 + 1;
+			bird.setPosition({ randomX, randomY });
+
+		}
+	}
+
+
 }
 
 // Called by event polling when a KeyPressed event is found

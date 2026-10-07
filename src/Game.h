@@ -26,11 +26,13 @@ class Game
   bool menuActive = true;
   bool playButtonHovered = false;
   bool exitButtonHovered = false;
+  bool ingame = false;
 
   sf::Font font;
   sf::Text titleText;
   sf::Text playText;
   sf::Text exitText;
+  sf::Text scoreText;
 
   //textures
   sf::Texture backgroundTexture{ "../Data/Images/Whackamole Worksheet/background.png" };
@@ -40,6 +42,10 @@ class Game
   sf::Sprite background = sf::Sprite(backgroundTexture);
   sf::Sprite bird = sf::Sprite(birdTexture);
 
+  //variableas
+  int score = 0;
+
+  sf::Vector2f birdVelocity{ 400.0f, 300.0f };
 };
 
 
